@@ -2,9 +2,7 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <title>Sistem Erişimi...</title>
     <style>
         body, html {
@@ -37,8 +35,8 @@
         
         .dynamic-code-block {
             position: absolute;
-            color: #705080; /* Soluk Lavanta */
-            font-size: 0.8em;
+            color: #F000FF; /* GÜNCELLENDİ: Daha parlak renk (Fuşya) */
+            font-size: 0.9em; /* GÜNCELLENDİ: Biraz daha büyük */
             white-space: pre;
             opacity: 0; 
             transition: opacity 1s linear; 
@@ -55,7 +53,7 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.5); /* GÜNCELLENDİ: Daha şeffaf arka plan */
         }
 
         #photo-area {
@@ -96,8 +94,8 @@
             margin-top: 30px;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            width: 90%; /* YENİ: Ekrana sığması için % */
-            max-width: 300px; /* YENİ: Ama 300px'den de büyümesin */
+            width: 90%; 
+            max-width: 300px; 
         }
         #links a {
             display: block;
@@ -150,8 +148,8 @@
             color: #0F0; 
             padding: 15px;
             font-size: 0.9em;
-            width: 90%; /* YENİ: %90 genişlik */
-            max-width: 500px; /* YENİ: Max 500px */
+            width: 90%; 
+            max-width: 500px; 
             height: 300px;
             overflow-y: auto;
             box-shadow: 0 0 30px rgba(224, 64, 251, 0.4);
@@ -193,23 +191,21 @@
             pointer-events: none;
         }
 
-        /* YENİ: MOBİL UYUMLULUK stilleri */
         @media (max-width: 600px) {
             #typewriter {
-                font-size: 1.8em; /* Yazıyı telefonda küçült */
+                font-size: 1.8em; 
             }
             #subtitle {
-                font-size: 1.0em; /* Altyazıyı küçült */
-                height: auto; /* Daktilo için otomatik yükseklik */
+                font-size: 1.0em; 
+                height: auto; 
             }
             .popup-terminal {
-                font-size: 0.75em; /* Terminal yazısını küçült */
-                height: 250px; /* Terminal yüksekliğini azalt */
+                font-size: 0.75em; 
+                height: 250px; 
             }
             #social-icons {
-                margin-top: 15px; /* Boşluğu azalt */
+                margin-top: 15px; 
             }
-            /* Glitch efektini telefonda biraz azalt (opsiyonel) */
             @keyframes glitch-lines {
                 0%   { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
                 10%  { clip-path: inset(10% 0 88% 0); transform: translate(-15px, 1px); }
@@ -290,10 +286,10 @@ int main() {
             
             document.getElementById('code-background').appendChild(codeBlock);
             
-            setTimeout(() => codeBlock.style.opacity = 0.4, 100);
+            setTimeout(() => codeBlock.style.opacity = 0.7, 100); /* GÜNCELLENDİ: Daha opak */
 
             let i = 0;
-            const typingSpeed = 50; 
+            const typingSpeed = 30; /* GÜNCELLENDİ: Daha hızlı yazım */
 
             function typeChar() {
                 if (i < text.length) {
@@ -413,29 +409,28 @@ int main() {
             }, duration);
         }
 
-        // YENİ: MOBİL UYUMLU TERMİNAL KONUMLANDIRMA
         function createPopupTerminal() {
             const terminal = document.createElement('div');
             terminal.className = 'popup-terminal';
             
             const edge = Math.floor(Math.random() * 4);
-            const offset = '5%'; // Yüzde kullanmak daha güvenli
+            const offset = '5%'; 
 
-            if (edge === 0) { // Üst
+            if (edge === 0) { 
                 terminal.style.top = offset; 
-                terminal.style.left = (Math.random() * 10) + 5 + '%'; // %5 ile %15 arası
+                terminal.style.left = (Math.random() * 10) + 5 + '%'; 
             }
-            else if (edge === 1) { // Sağ
+            else if (edge === 1) { 
                 terminal.style.right = offset;
-                terminal.style.top = (Math.random() * 50 + 10) + '%'; // %10 ile %60 arası
+                terminal.style.top = (Math.random() * 50 + 10) + '%'; 
             }
-            else if (edge === 2) { // Alt
+            else if (edge === 2) { 
                 terminal.style.bottom = offset;
-                terminal.style.left = (Math.random() * 10) + 5 + '%'; // %5 ile %15 arası
+                terminal.style.left = (Math.random() * 10) + 5 + '%'; 
             }
-            else { // Sol
+            else { 
                 terminal.style.left = offset;
-                terminal.style.top = (Math.random() * 50 + 10) + '%'; // %10 ile %60 arası
+                terminal.style.top = (Math.random() * 50 + 10) + '%'; 
             }
 
             const content = terminalTexts[Math.floor(Math.random() * terminalTexts.length)];
@@ -444,7 +439,6 @@ int main() {
             return terminal;
         }
 
-        // --- Her şeyi Başlat ---
         window.onload = function() {
             photoArea.style.opacity = 1;
             setTimeout(typeWriterName, 500); 
