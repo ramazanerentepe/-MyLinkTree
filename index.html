@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Erişimi...</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #100018; /* Siberpunk Mor Arka Plan */
+            font-family: 'Courier New', Courier, monospace;
+            color: #F000FF; /* Ana Metin Rengi (Fuşya) */
+        }
+
+        #glitch-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; 
+        }
+
+        /* 1. Arka Plan (Dinamik Kod Editörü) */
+        #code-background {
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; 
+            overflow: hidden;
+        }
+        
+        .dynamic-code-block {
+            position: absolute;
+            color: #705080; /* Soluk Lavanta */
+            font-size: 0.8em;
+            white-space: pre;
+            opacity: 0; 
+            transition: opacity 1s linear; 
+            z-index: 2; 
+            max-width: 300px;
+        }
+
+        /* Ana İçerik */
+        #main-content {
+            position: relative;
+            z-index: 10; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+        }
+
+        /* Fotoğraf Alanı */
+        #photo-area {
+            width: 100px;
+            height: 100px;
+            background-color: #222; /* Fotoğraf yokken yer tutucu */
+            border: 3px solid #F000FF; /* Fuşya çerçeve */
+            border-radius: 50%; /* Tam daire */
+            margin-bottom: 20px;
+            opacity: 0; /* Başlangıçta gizli */
+            transition: opacity 0.8s ease-in-out;
+            /* Buraya kendi fotoğrafını eklemek için:
+               background-image: url('senin-fotograf-linkin.jpg');
+               background-size: cover;
+               background-position: center;
+            */
+        }
+
+        /* İsim (Typewriter) */
+        #typewriter {
+            font-size: 2.5em;
+            border-right: 0.1em solid #F000FF; /* İmleç */
+            white-space: nowrap;
+            overflow: hidden;
+            letter-spacing: .1em;
+            animation: blink-caret .75s step-end infinite;
+            margin: 0;
+        }
+        
+        /* Altyazı (Typewriter) */
+        #subtitle {
+            font-size: 1.2em;
+            color: #F000FF;
+            opacity: 0.8; /* İsimden biraz daha soluk */
+            margin: 10px 0 0 0;
+            height: 1.5em; /* Daktilo için yer ayırır */
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #F000FF; }
+        }
+        
+        /* Link Butonları (6 Adet) */
+        #links {
+            margin-top: 30px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            width: 300px; 
+        }
+        #links a {
+            display: block;
+            background-color: #111;
+            color: #F000FF;
+            border: 1px solid #F000FF;
+            padding: 15px;
+            margin: 10px auto;
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #links a:hover {
+            background-color: #F000FF;
+            color: #100018;
+        }
+
+        /* Daire Logo Butonları */
+        #social-icons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px; 
+            opacity: 0; 
+            transition: opacity 1s ease-in-out;
+        }
+        .social-icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: transparent;
+            color: #F000FF;
+            border: 2px solid #F000FF;
+            border-radius: 50%;
+            text-decoration: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .social-icon:hover {
+            background-color: #F000FF;
+            color: #100018;
+        }
+
+        /* Terminal stilleri (Aynı) */
+        .popup-terminal {
+            position: absolute; 
+            z-index: 30; 
+            background: rgba(30, 25, 30, 0.95);
+            border-top: 2px solid #E040FB;
+            color: #0F0; 
+            padding: 15px;
+            font-size: 0.9em;
+            width: 500px;
+            height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 0 30px rgba(224, 64, 251, 0.4);
+            opacity: 0;
+            animation: terminal-fade-in 0.3s forwards;
+        }
+        .popup-terminal pre { margin: 0; white-space: pre-wrap; color: #0F0; }
+        .popup-terminal .header {
+            font-weight: bold;
+            color: #E040FB;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
+        @keyframes terminal-fade-in {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Ana Glitch Animasyonu (Aynı) */
+        #glitch-wrapper.glitch-active {
+            animation: glitch-lines 0.3s steps(5) infinite;
+        }
+        @keyframes glitch-lines {
+            0%   { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+            10%  { clip-path: inset(10% 0 88% 0); transform: translate(-30px, 2px); }
+            20%  { clip-path: inset(40% 0 55% 0); transform: translate(30px, -3px); }
+            30%  { clip-path: inset(25% 0 70% 0); transform: translate(0, 0); }
+            40%  { clip-path: inset(80% 0 10% 0); transform: translate(-40px, 1px); }
+            60%  { clip-path: inset(25% 0 70% 0); transform: translate(25px, 4px); }
+            70%  { clip-path: inset(50% 0 45% 0); transform: translate(0, 0); }
+            80%  { clip-path: inset(50% 0 45% 0); transform: translate(-20px, -2px); }
+            100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+        }
+        
+        /* Nadir renkli çizgilerin stili (Aynı) */
+        .color-glitch-line {
+            position: absolute;
+            z-index: 50; 
+            opacity: 0.9; 
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="glitch-wrapper">
+    
+        <div id="code-background"></div>
+    
+        <div id="main-content">
+            
+            <div id="photo-area"></div>
+
+            <h1 id="typewriter"></h1>
+            
+            <p id="subtitle"></p>
+            
+            <div id="links">
+                <a href="#">[ YouTube Kanalım ]</a>
+                <a href="#">[ GitHub Profilim ]</a>
+                <a href="#">[ LinkedIn ]</a>
+                <a href="#">[ Kişisel Blog ]</a>
+                <a href="#">[ Projelerim ]</a>
+                <a href="#">[ Write-ups ]</a>
+            </div>
+
+            <div id="social-icons">
+                <a href="#" class="social-icon">G</a>
+                <a href="#" class="social-icon">L</a>
+                <a href="#" class="social-icon">T</a>
+                <a href="#" class="social-icon">Y</a>
+                <a href="#" class="social-icon">I</a> </div>
+
+        </div>
+        
+    </div>
+
+    <script>
+        // Arka plan kod parçacıkları dizisi
+        const bgCodeSnippets = [
+`public class Main {
+    public static void main(String[] args) {
+        // Sistem çekirdeği başlatılıyor...
+        System.out.println("Sistem Çekirdeği...");
+    }
+}`,
+`#include <stdio.h>
+int main() {
+   /* Bellek adresleri taranıyor... */
+   printf("Bellek taranıyor...\\n");
+   return 0;
+}`,
+`def scan_ports(target):
+    print(f"[INFO] {target} taranıyor...")
+    for port in range(1, 1025):
+        # socket.connect_ex...
+        pass`
+        ];
+
+        // "Dinamik Kod Editörü" fonksiyonu
+        function createDynamicCodeBlock() {
+            const codeBlock = document.createElement('pre');
+            codeBlock.className = 'dynamic-code-block';
+            const text = bgCodeSnippets[Math.floor(Math.random() * bgCodeSnippets.length)];
+            
+            codeBlock.style.top = (Math.random() * 80 + 10) + '%';
+            codeBlock.style.left = (Math.random() * 70 + 10) + '%';
+            
+            document.getElementById('code-background').appendChild(codeBlock);
+            
+            setTimeout(() => codeBlock.style.opacity = 0.4, 100);
+
+            let i = 0;
+            const typingSpeed = 50; 
+
+            function typeChar() {
+                if (i < text.length) {
+                    codeBlock.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeChar, typingSpeed);
+                } else {
+                    setTimeout(() => {
+                        codeBlock.style.opacity = 0;
+                        setTimeout(() => codeBlock.remove(), 1000); 
+                    }, 3000); 
+                }
+            }
+            typeChar();
+        }
+
+        // Daktilo Mantığı (İsim + Altyazı)
+        const photoArea = document.getElementById('photo-area');
+        const typewriterElement = document.getElementById('typewriter');
+        const subtitleElement = document.getElementById('subtitle');
+        const linksElement = document.getElementById('links');
+        const socialIcons = document.getElementById('social-icons');
+
+        let i_name = 0; 
+        let j_subtitle = 0; 
+        
+        const textToType = "Ramazan Eren Tepe";
+        const subtitleToType = "Siber Güvenlik | Yazılım Mühendisi"; 
+        const nameSpeed = 150;
+        const subtitleSpeed = 100;
+
+        function typeWriterName() {
+            if (i_name < textToType.length) {
+                typewriterElement.innerHTML += textToType.charAt(i_name);
+                i_name++;
+                setTimeout(typeWriterName, nameSpeed);
+            } else {
+                typewriterElement.style.borderRight = 'none';
+                setTimeout(typeWriterSubtitle, 300); 
+            }
+        }
+
+        function typeWriterSubtitle() {
+            if (j_subtitle === 0) {
+                subtitleElement.style.borderRight = '0.1em solid #F000FF';
+                subtitleElement.style.animation = 'blink-caret .75s step-end infinite';
+                subtitleElement.style.whiteSpace = 'nowrap';
+                subtitleElement.style.overflow = 'hidden';
+                subtitleElement.style.display = 'inline-block';
+            }
+
+            if (j_subtitle < subtitleToType.length) {
+                subtitleElement.innerHTML += subtitleToType.charAt(j_subtitle);
+                j_subtitle++;
+                setTimeout(typeWriterSubtitle, subtitleSpeed);
+            } else {
+                subtitleElement.style.borderRight = 'none';
+                
+                setTimeout(() => {
+                    linksElement.style.opacity = 1;
+                    socialIcons.style.opacity = 1;
+                }, 500);
+            }
+        }
+
+        // Terminal ve Efekt Tetikleyiciler
+        const glitchWrapper = document.getElementById('glitch-wrapper');
+        
+        const terminalTexts = [
+            { title: "root@kali:~/net/scan", text: "[INFO] Nmap başlatılıyor...\nNmap scan report for 10.10.12.14\nHost is up (0.021s latency).\nNot shown: 997 closed ports\nPORT    STATE SERVICE  VERSION\n22/tcp  open  ssh      OpenSSH 8.2p1\n80/tcp  open  http     Apache httpd 2.4.41\n443/tcp open  ssl/http Apache httpd 2.4.41\n\n[SİMÜLASYON TAMAMLANDI]" },
+            { title: "root@kali:~/wifi", text: "[INFO] Airodump-ng başlatılıyor (wlan0mon)...\n BSSID              PWR  Beacons    #Data, #/s  CH  MB   ENC  CIPHER AUTH ESSID\n 00:1A:2B:3C:4D:5E  -45    120       1500   10   6  54e. WPA2 CCMP   PSK  'Target_Network'\n[SİMÜLASYON] ...paketler yakalanıyor." },
+            { title: "root@kali:~/exploit", text: "[INFO] Metasploit Framework başlatılıyor...\nmsf6 > use exploit/multi/http/...\nmsf6 exploit(...) > set RHOSTS 10.10.12.14\n[+] RHOSTS => 10.10.12.14\nmsf6 exploit(...) > set PAYLOAD linux/x64/meterpreter/reverse_tcp\n[+] PAYLOAD => linux/x64/meterpreter/reverse_tcp\n[*] Exploit başlatılıyor...\n[SİMÜLASYON] ...bağlantı bekleniyor..." }
+        ];
+
+        function createColorGlitchLines() {
+            const lines = [];
+            const numLines = Math.floor(Math.random() * 11) + 10; 
+            const colors = ['#f00', '#00f', '#0ff', '#f0f', '#ff0']; 
+
+            for (let i = 0; i < numLines; i++) {
+                const line = document.createElement('div');
+                line.className = 'color-glitch-line';
+                line.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                line.style.height = (Math.floor(Math.random() * 3) + 2) + 'px'; 
+                line.style.width = (Math.floor(Math.random() * 30) + 20) + '%'; 
+                line.style.top = (Math.random() * 95) + '%';
+                line.style.left = (Math.random() * 70) + '%'; 
+                lines.push(line);
+            }
+            return lines;
+        }
+
+        function triggerEffects() {
+            const duration = Math.random() * 3000 + 1000; 
+
+            glitchWrapper.classList.add('glitch-active');
+            
+            const activeTerminal = createPopupTerminal();
+            glitchWrapper.appendChild(activeTerminal);
+
+            let colorGlitches = []; 
+            
+            const shouldTriggerColorGlitch = Math.random() < 0.5;
+            
+            if (shouldTriggerColorGlitch) {
+                colorGlitches = createColorGlitchLines(); 
+                colorGlitches.forEach(line => glitchWrapper.appendChild(line)); 
+            }
+
+            setTimeout(() => {
+                glitchWrapper.classList.remove('glitch-active');
+                activeTerminal.remove();
+                
+                if (colorGlitches.length > 0) {
+                    colorGlitches.forEach(line => line.remove());
+                }
+            }, duration);
+        }
+
+        function createPopupTerminal() {
+            const terminal = document.createElement('div');
+            terminal.className = 'popup-terminal';
+            
+            const edge = Math.floor(Math.random() * 4);
+            const offset = '20px';
+
+            if (edge === 0) { terminal.style.top = offset; terminal.style.left = (Math.random() * (window.innerWidth - 550)) + 'px'; }
+            else if (edge === 1) { terminal.style.right = offset; terminal.style.top = (Math.random() * (window.innerHeight - 350)) + 'px'; }
+            else if (edge === 2) { terminal.style.bottom = offset; terminal.style.left = (Math.random() * (window.innerWidth - 550)) + 'px'; }
+            else { terminal.style.left = offset; terminal.style.top = (Math.random() * (window.innerHeight - 350)) + 'px'; }
+
+            const content = terminalTexts[Math.floor(Math.random() * terminalTexts.length)];
+            terminal.innerHTML = `<div class="header">${content.title}</div><pre>${content.text}</pre>`;
+            
+            return terminal;
+        }
+
+        // --- Her şeyi Başlat ---
+        window.onload = function() {
+            photoArea.style.opacity = 1;
+            setTimeout(typeWriterName, 500); 
+            setInterval(createDynamicCodeBlock, 1500); 
+            setInterval(triggerEffects, Math.random() * 15000 + 15000);
+        };
+    </script>
+
+</body>
+</html>
