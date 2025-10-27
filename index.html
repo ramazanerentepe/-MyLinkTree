@@ -2,7 +2,9 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Sistem Erişimi...</title>
     <style>
         body, html {
@@ -23,7 +25,6 @@
             overflow: hidden; 
         }
 
-        /* 1. Arka Plan (Dinamik Kod Editörü) */
         #code-background {
             position: fixed; 
             top: 0;
@@ -45,7 +46,6 @@
             max-width: 300px;
         }
 
-        /* Ana İçerik */
         #main-content {
             position: relative;
             z-index: 10; 
@@ -58,27 +58,20 @@
             background: rgba(0, 0, 0, 0.7);
         }
 
-        /* Fotoğraf Alanı */
         #photo-area {
             width: 100px;
             height: 100px;
-            background-color: #222; /* Fotoğraf yokken yer tutucu */
-            border: 3px solid #F000FF; /* Fuşya çerçeve */
-            border-radius: 50%; /* Tam daire */
+            background-color: #222; 
+            border: 3px solid #F000FF; 
+            border-radius: 50%; 
             margin-bottom: 20px;
-            opacity: 0; /* Başlangıçta gizli */
+            opacity: 0; 
             transition: opacity 0.8s ease-in-out;
-            /* Buraya kendi fotoğrafını eklemek için:
-               background-image: url('senin-fotograf-linkin.jpg');
-               background-size: cover;
-               background-position: center;
-            */
         }
 
-        /* İsim (Typewriter) */
         #typewriter {
             font-size: 2.5em;
-            border-right: 0.1em solid #F000FF; /* İmleç */
+            border-right: 0.1em solid #F000FF; 
             white-space: nowrap;
             overflow: hidden;
             letter-spacing: .1em;
@@ -86,13 +79,12 @@
             margin: 0;
         }
         
-        /* Altyazı (Typewriter) */
         #subtitle {
             font-size: 1.2em;
             color: #F000FF;
-            opacity: 0.8; /* İsimden biraz daha soluk */
+            opacity: 0.8; 
             margin: 10px 0 0 0;
-            height: 1.5em; /* Daktilo için yer ayırır */
+            height: 1.5em; 
         }
 
         @keyframes blink-caret {
@@ -100,12 +92,12 @@
             50% { border-color: #F000FF; }
         }
         
-        /* Link Butonları (6 Adet) */
         #links {
             margin-top: 30px;
             opacity: 0;
             transition: opacity 1s ease-in-out;
-            width: 300px; 
+            width: 90%; /* YENİ: Ekrana sığması için % */
+            max-width: 300px; /* YENİ: Ama 300px'den de büyümesin */
         }
         #links a {
             display: block;
@@ -122,7 +114,6 @@
             color: #100018;
         }
 
-        /* Daire Logo Butonları */
         #social-icons {
             margin-top: 25px;
             display: flex;
@@ -151,7 +142,6 @@
             color: #100018;
         }
 
-        /* Terminal stilleri (Aynı) */
         .popup-terminal {
             position: absolute; 
             z-index: 30; 
@@ -160,7 +150,8 @@
             color: #0F0; 
             padding: 15px;
             font-size: 0.9em;
-            width: 500px;
+            width: 90%; /* YENİ: %90 genişlik */
+            max-width: 500px; /* YENİ: Max 500px */
             height: 300px;
             overflow-y: auto;
             box-shadow: 0 0 30px rgba(224, 64, 251, 0.4);
@@ -180,7 +171,6 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Ana Glitch Animasyonu (Aynı) */
         #glitch-wrapper.glitch-active {
             animation: glitch-lines 0.3s steps(5) infinite;
         }
@@ -196,12 +186,41 @@
             100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
         }
         
-        /* Nadir renkli çizgilerin stili (Aynı) */
         .color-glitch-line {
             position: absolute;
             z-index: 50; 
             opacity: 0.9; 
             pointer-events: none;
+        }
+
+        /* YENİ: MOBİL UYUMLULUK stilleri */
+        @media (max-width: 600px) {
+            #typewriter {
+                font-size: 1.8em; /* Yazıyı telefonda küçült */
+            }
+            #subtitle {
+                font-size: 1.0em; /* Altyazıyı küçült */
+                height: auto; /* Daktilo için otomatik yükseklik */
+            }
+            .popup-terminal {
+                font-size: 0.75em; /* Terminal yazısını küçült */
+                height: 250px; /* Terminal yüksekliğini azalt */
+            }
+            #social-icons {
+                margin-top: 15px; /* Boşluğu azalt */
+            }
+            /* Glitch efektini telefonda biraz azalt (opsiyonel) */
+            @keyframes glitch-lines {
+                0%   { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+                10%  { clip-path: inset(10% 0 88% 0); transform: translate(-15px, 1px); }
+                20%  { clip-path: inset(40% 0 55% 0); transform: translate(15px, -1px); }
+                30%  { clip-path: inset(25% 0 70% 0); transform: translate(0, 0); }
+                40%  { clip-path: inset(80% 0 10% 0); transform: translate(-20px, 1px); }
+                60%  { clip-path: inset(25% 0 70% 0); transform: translate(10px, 2px); }
+                70%  { clip-path: inset(50% 0 45% 0); transform: translate(0, 0); }
+                80%  { clip-path: inset(50% 0 45% 0); transform: translate(-10px, -1px); }
+                100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+            }
         }
 
     </style>
@@ -234,7 +253,8 @@
                 <a href="#" class="social-icon">L</a>
                 <a href="#" class="social-icon">T</a>
                 <a href="#" class="social-icon">Y</a>
-                <a href="#" class="social-icon">I</a> </div>
+                <a href="#" class="social-icon">I</a>
+            </div>
 
         </div>
         
@@ -245,20 +265,17 @@
         const bgCodeSnippets = [
 `public class Main {
     public static void main(String[] args) {
-        // Sistem çekirdeği başlatılıyor...
         System.out.println("Sistem Çekirdeği...");
     }
 }`,
 `#include <stdio.h>
 int main() {
-   /* Bellek adresleri taranıyor... */
    printf("Bellek taranıyor...\\n");
    return 0;
 }`,
 `def scan_ports(target):
     print(f"[INFO] {target} taranıyor...")
     for port in range(1, 1025):
-        # socket.connect_ex...
         pass`
         ];
 
@@ -353,7 +370,7 @@ int main() {
 
         function createColorGlitchLines() {
             const lines = [];
-            const numLines = Math.floor(Math.random() * 11) + 10; 
+            const numLines = Math.floor(Math.random() * 11) + 10;
             const colors = ['#f00', '#00f', '#0ff', '#f0f', '#ff0']; 
 
             for (let i = 0; i < numLines; i++) {
@@ -396,17 +413,30 @@ int main() {
             }, duration);
         }
 
+        // YENİ: MOBİL UYUMLU TERMİNAL KONUMLANDIRMA
         function createPopupTerminal() {
             const terminal = document.createElement('div');
             terminal.className = 'popup-terminal';
             
             const edge = Math.floor(Math.random() * 4);
-            const offset = '20px';
+            const offset = '5%'; // Yüzde kullanmak daha güvenli
 
-            if (edge === 0) { terminal.style.top = offset; terminal.style.left = (Math.random() * (window.innerWidth - 550)) + 'px'; }
-            else if (edge === 1) { terminal.style.right = offset; terminal.style.top = (Math.random() * (window.innerHeight - 350)) + 'px'; }
-            else if (edge === 2) { terminal.style.bottom = offset; terminal.style.left = (Math.random() * (window.innerWidth - 550)) + 'px'; }
-            else { terminal.style.left = offset; terminal.style.top = (Math.random() * (window.innerHeight - 350)) + 'px'; }
+            if (edge === 0) { // Üst
+                terminal.style.top = offset; 
+                terminal.style.left = (Math.random() * 10) + 5 + '%'; // %5 ile %15 arası
+            }
+            else if (edge === 1) { // Sağ
+                terminal.style.right = offset;
+                terminal.style.top = (Math.random() * 50 + 10) + '%'; // %10 ile %60 arası
+            }
+            else if (edge === 2) { // Alt
+                terminal.style.bottom = offset;
+                terminal.style.left = (Math.random() * 10) + 5 + '%'; // %5 ile %15 arası
+            }
+            else { // Sol
+                terminal.style.left = offset;
+                terminal.style.top = (Math.random() * 50 + 10) + '%'; // %10 ile %60 arası
+            }
 
             const content = terminalTexts[Math.floor(Math.random() * terminalTexts.length)];
             terminal.innerHTML = `<div class="header">${content.title}</div><pre>${content.text}</pre>`;
