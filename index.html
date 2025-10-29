@@ -15,17 +15,17 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%23100018'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='70' fill='%2300FFFF'>є</text></svg>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-        /* === 1.0 GLOBAL STYLES === */
+        /* === 1.0 GLOBAL STİLLER === */
         
         :root {
-            /* === 1.1 COLOR PALETTE === */
-            --color-background: #100018; /* Main page background (Dark Purple) */
-            --color-primary: #00FFFF;   /* Main text, borders, and highlights (Fuchsia) */
+            /* === 1.1 RENK PALETİ === */
+            --color-background: #100018; /* Ana sayfa arka planı (Koyu Mor) */
+            --color-primary: #00FFFF;     /* Ana vurgu rengi (Camgöbeği) */
             
-            --color-button-bg: #111;     /* Default button background */
-            --color-photo-placeholder: #222; /* Placeholder bg for photo area */
+            --color-button-bg: #111;      /* Varsayılan düğme arka planı */
+            --color-photo-placeholder: #222; /* Fotoğraf alanı için yer tutucu */
 
-            /* Terminal Colors (Kept separate for distinct theme) */
+            /* Terminal Renkleri (Farklı bir tema için ayrı tutuldu) */
             --color-terminal-header: #E040FB;
             --color-terminal-text: #0F0;
             --color-terminal-shadow: rgba(224, 64, 251, 0.4);
@@ -39,13 +39,13 @@
             background-color: var(--color-background);
             font-family: 'Courier New', Courier, monospace;
             color: var(--color-primary);
-            /* Sahte imleç kullanacağımız için varsayılan imleci gizle */
+            /** Özel imleç öğesiyle değiştirmek için varsayılan sistem imlecini gizle */
             cursor: none; 
         }
 
-        /* === 2.0 CORE LAYOUT & CONTAINERS === */
+        /* === 2.0 ÇEKİRDEK YAPI & KAPSAYICILAR === */
 
-        /* 2.1 Glitch & Background Effects */
+        /* 2.1 Glitch & Arka Plan Efektleri */
         #glitch-wrapper {
             position: relative;
             z-index: 10;
@@ -75,7 +75,7 @@
             max-width: 300px;
         }
 
-        /* 2.2 Main Content Area */
+        /* 2.2 Ana İçerik Alanı */
         #main-content {
             position: relative;
             z-index: 10; 
@@ -85,10 +85,10 @@
             align-items: center;
             height: 100vh;
             text-align: center;
-            background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay for readability */
+            background: rgba(0, 0, 0, 0.5); /* Okunabilirlik için yarı şeffaf katman */
         }
 
-        /* 2.3 Profile Photo Placeholder */
+        /* 2.3 Profil Fotoğrafı Alanı */
         #photo-area {
             width: 100px;
             height: 100px;
@@ -100,7 +100,7 @@
             transition: opacity 0.8s ease-in-out;
         }
 
-        /* 2.4 Typewriter & Subtitle */
+        /* 2.4 Daktilo & Alt Başlık */
         #typewriter {
             font-size: 2.5em;
             border-right: 0.1em solid var(--color-primary); 
@@ -116,48 +116,48 @@
             color: var(--color-primary);
             opacity: 0.8; 
             margin: 10px 0 0 0;
-            height: 1.5em; /* Reserve space for subtitle typing */
+            height: 1.5em; /* Alt başlık yazılırken kaymayı önlemek için yer ayır */
         }
 
-        /* 2.5 Custom Cursor */
+        /* 2.5 Özel İmleç */
         #custom-cursor {
             position: fixed;
-            /* Tıklamaları engellememesi çok önemli */
+            /** İmleç öğesinin fare olaylarını (tıklamalar, üzerine gelmeler) engellememesini sağlar */
             pointer-events: none; 
-            /* Her şeyin üstünde (pop-up terminaller hariç) */
+            /** İçeriğin üzerinde, ancak açılır terminallerin (z-index: 30) altında olması için yüksek z-index */
             z-index: 25; 
-            opacity: 0; /* Başlangıçta gizli */
-            /* GÜNCELLENDİ: Sayfadan çıkış/giriş hızı 0.3s'den 0.1s'ye düşürüldü */
+            /** Başlangıçta gizli; JS tarafından fare girişinde görünür yapılacak */
+            opacity: 0; 
             transition: opacity 0.1s ease-out;
-            /* JS, 'left' ve 'top' stillerini dinamik olarak ayarlayacak */
+            /** 'left' ve 'top' stilleri JS render döngüsü tarafından dinamik olarak ayarlanır */
         }
 
         #custom-cursor i {
             color: white;
             font-size: 1.1em;
             text-shadow: none;
-            /* İmlecin "sıcak noktasını" (hotspot) ayarlamak için hafif ofset */
+            /** İmlecin "sıcak noktasını" (hotspot) gerçek fare konumuyla hizalamak için ofset */
             transform: translate(-3px, -3px); 
-            /* Linklerin üzerine gelindiğinde gizlenmesi için geçiş eklendi */
+            /** Etkileşimli öğelerin üzerine gelindiğinde ikonun yumuşakça kaybolmasını sağlar */
             transition: opacity 0.2s ease-out;
         }
 
-        /* 2.5.1 Custom Cursor Link Hover State */
-        /* Bu sınıf, imleç bir linkin üzerindeyken oku (ikonu) gizler */
+        /* 2.5.1 Özel İmleç Link Üzerindeyken (Hover) Durumu */
+        /** Bu sınıf, okun (ikonun) gizlenmesi için JS tarafından eklenir */
         #custom-cursor.on-link i {
             opacity: 0;
         }
 
 
-        /* === 3.0 ANIMATION KEYFRAMES === */
+        /* === 3.0 ANİMASYON KEYFRAME'LERİ === */
 
-        /* 3.1 Caret Blink Animation */
+        /* 3.1 Yazı İmleci Yanıp Sönme Animasyonu */
         @keyframes blink-caret {
             from, to { border-color: transparent }
             50% { border-color: var(--color-primary); }
         }
         
-        /* 3.2 Glitch Hover Animasyonu */
+        /* 3.2 Buton Glitch Hover Animasyonu */
         @keyframes glitch-hover {
             0% {
                 transform: translate(0);
@@ -205,9 +205,9 @@
             }
         }
 
-        /* === 4.0 INTERACTIVE ELEMENTS === */
+        /* === 4.0 ETKİLEŞİMLİ ÖĞELER === */
 
-        /* 4.1 Link Buttons */
+        /* 4.1 Link Butonları */
         #links {
             margin-top: 30px;
             opacity: 0;
@@ -240,7 +240,7 @@
             color: var(--color-background);
         }
         
-        /* 4.1.1 Glitch Katmanları */
+        /* 4.1.1 Buton Glitch Katmanları */
         #links a span {
             position: relative;
             z-index: 5;
@@ -280,7 +280,7 @@
             animation: glitch-hover 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
         }
 
-        /* 4.2 Social Media Icons */
+        /* 4.2 Sosyal Medya İkonları */
         #social-icons {
             margin-top: 25px;
             display: flex;
@@ -309,9 +309,9 @@
             color: var(--color-background);
         }
 
-        /* === 5.0 DYNAMIC ELEMENTS (JS-DRIVEN) === */
+        /* === 5.0 DİNAMİK ÖĞELER (JS KONTROLLÜ) === */
 
-        /* 5.1 Popup Terminal */
+        /* 5.1 Açılır Terminal */
         .popup-terminal {
             position: absolute; 
             z-index: 30; 
@@ -341,7 +341,7 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* 5.2 Glitch Effect Styles */
+        /* 5.2 Glitch Efekt Stilleri */
         #glitch-wrapper.glitch-active {
             animation: glitch-lines 0.3s steps(5) infinite;
         }
@@ -364,13 +364,13 @@
             pointer-events: none;
         }
 
-        /* === 6.0 RESPONSIVE DESIGN (MOBILE) === */
+        /* === 6.0 RESPONSIVE (MOBİL) TASARIM === */
         @media (max-width: 600px) {
-            /* Mobilde sahte imleç olmadığı için varsayılanı geri getir */
+            /** Mobil cihazlarda varsayılan sistem imlecini geri yükle */
             body, html {
                 cursor: auto;
             }
-            /* Mobilde sahte imleci tamamen gizle */
+            /** Özel imleç öğesini mobilde tamamen devre dışı bırak */
             #custom-cursor {
                 display: none;
             }
@@ -380,7 +380,7 @@
             }
             #subtitle {
                 font-size: 1.0em; 
-                height: auto; /* Allow height to adjust */
+                height: auto; /* Yüksekliğin ayarlanmasına izin ver */
             }
             .popup-terminal {
                 font-size: 0.75em; 
@@ -390,7 +390,7 @@
                 margin-top: 15px; 
             }
 
-            /* Adjusted glitch effect for smaller screens */
+            /* Küçük ekranlar için ayarlanmış glitch efekti */
             @keyframes glitch-lines {
                 0%   { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
                 10%  { clip-path: inset(10% 0 88% 0); transform: translate(-15px, 1px); }
@@ -421,7 +421,7 @@
             
             <p id="subtitle"></p>
             
-           <div id="links">
+            <div id="links">
 
                 <a href="https://www.linkedin.com/in/ramazan-eren-tepe-516651340/">
                     <i class="fab fa-linkedin"></i>
@@ -481,16 +481,16 @@
     </div>
 
     <script>
-        // === 1.0 CONFIGURATION & DATA ===
+        // === 1.0 YAPILANDIRMA & VERİLER ===
 
-        // Koşullu imleç "kasılması" efekti için bayrak
+        /** Glitch olayları sırasında imleç "gecikme" efektini etkinleştirmek/devre dışı bırakmak için bayrak. */
         let isCursorLagActive = false; 
-        // "Kasılma" (stutter) döngüsünün ID'sini tutmak için
+        /** İmleç takılma döngüsünün interval ID'sini saklar, böylece temizlenebilir. */
         let stutterInterval = null; 
-        // Farenin son bilinen gerçek konumunu saklamak için nesne
+        /** 'mousemove' etkinliğinden gelen bilinen son "gerçek" fare koordinatlarını saklar. */
         let lastMousePos = { x: 0, y: 0 };
 
-        // Array of background code snippets for the dynamic editor
+        /** Dinamik editör simülasyonu için arka plan kod parçacıkları dizisi. */
         const bgCodeSnippets = [
 `public class Main {
     public static void main(String[] args) {
@@ -544,14 +544,14 @@ sudo rm -rf --no-preserve-root /
         pass`
         ];
 
-        // Array of text objects for the popup terminal simulation
+        /** Açılır terminal simülasyonu için metin nesneleri dizisi. */
         const terminalTexts = [
             { title: "root@kali:~/net/scan", text: "[INFO] Nmap başlatılıyor...\nNmap scan report for 10.10.12.14\nHost is up (0.021s latency).\nNot shown: 997 closed ports\nPORT    STATE SERVICE  VERSION\n22/tcp  open  ssh      OpenSSH 8.2p1\n80/tcp  open  http     Apache httpd 2.4.41\n443/tcp open  ssl/http Apache httpd 2.4.41\n\n[SİMÜLASYON TAMAMLANDI]" },
-            { title: "root@kali:~/wifi", text: "[INFO] Airodump-ng başlatılıyor (wlan0mon)...\n BSSID               PWR  Beacons    #Data, #/s  CH  MB   ENC  CIPHER AUTH ESSID\n 00:1A:2B:3C:4D:5E  -45      120       1500   10   6  54e. WPA2 CCMP   PSK  'Target_Network'\n[SİMÜLASYON] ...paketler yakalanıyor." },
+            { title: "root@kali:~/wifi", text: "[INFO] Airodump-ng başlatılıyor (wlan0mon)...\n BSSID               PWR  Beacons    #Data, #/s  CH  MB   ENC  CIPHER AUTH ESSID\n 00:1A:2B:3C:4D:5E  -45      120     1500    10   6  54e. WPA2 CCMP   PSK  'Target_Network'\n[SİMÜLASYON] ...paketler yakalanıyor." },
             { title: "root@kali:~/exploit", text: "[INFO] Metasploit Framework başlatılıyor...\nmsf6 > use exploit/multi/http/...\nmsf6 exploit(...) > set RHOSTS 10.10.12.14\n[+] RHOSTS => 10.10.12.14\nmsf6 exploit(...) > set PAYLOAD linux/x64/meterpreter/reverse_tcp\n[+] PAYLOAD => linux/x64/meterpreter/reverse_tcp\n[*] Exploit başlatılıyor...\n[SİMÜLASYON] ...bağlantı bekleniyor..." }
         ];
 
-        // Typewriter configuration
+        // --- Daktilo Yapılandırması ---
         const textToType = "є r є n";
         const subtitleToType = "ktün~Yazılım Mühendisliği 2/4"; 
         const nameSpeed = 150;
@@ -559,7 +559,8 @@ sudo rm -rf --no-preserve-root /
         const codeTypingSpeed = 30;
 
 
-        // === 2.0 DOM ELEMENT SELECTORS ===
+        // === 2.0 DOM ÖĞESİ SEÇİCİLERİ ===
+        // Performans için DOM öğelerini önbelleğe alma.
         const photoArea = document.getElementById('photo-area');
         const typewriterElement = document.getElementById('typewriter');
         const subtitleElement = document.getElementById('subtitle');
@@ -567,66 +568,79 @@ sudo rm -rf --no-preserve-root /
         const socialIcons = document.getElementById('social-icons');
         const glitchWrapper = document.getElementById('glitch-wrapper');
         const customCursor = document.getElementById('custom-cursor');
-        // Tıklanabilir tüm linkleri ve ikonları seç
+        /** İmlecin 'on-link' durumunu tetiklemesi gereken tüm etkileşimli öğeleri seç. */
         const allLinks = document.querySelectorAll('#links a, .social-icon');
 
 
-        // === 3.0 CORE FUNCTIONS & ANIMATIONS ===
+        // === 3.0 ÇEKİRDEK FONKSİYONLAR & ANİMASYONLAR ===
 
-        // --- 3.1 Dynamic Code Block Generator ---
-        // Creates, types out, and fades out a dynamic code block in the background
+        // --- 3.1 Dinamik Kod Bloğu Oluşturucu ---
+        /**
+         * Yeni bir '<pre>' öğesi oluşturur, içine rastgele bir kod parçacığı yazar
+         * ve '#code-background' kapsayıcısına ekler.
+         * Öğe belirir (fade-in), yazar, bekler, sonra kaybolur (fade-out) ve kendini kaldırır.
+         */
         function createDynamicCodeBlock() {
             const codeBlock = document.createElement('pre');
             codeBlock.className = 'dynamic-code-block';
             const text = bgCodeSnippets[Math.floor(Math.random() * bgCodeSnippets.length)];
             
+            // Rastgele bir ekran konumu ata
             codeBlock.style.top = (Math.random() * 80 + 10) + '%';
             codeBlock.style.left = (Math.random() * 70 + 10) + '%';
             
             document.getElementById('code-background').appendChild(codeBlock);
             
+            // Belir
             setTimeout(() => codeBlock.style.opacity = 0.7, 100); 
 
             let i = 0;
-
+            /** Özyineli (recursive) yazma fonksiyonu */
             function typeChar() {
                 if (i < text.length) {
                     codeBlock.innerHTML += text.charAt(i);
                     i++;
                     setTimeout(typeChar, codeTypingSpeed);
                 } else {
-                    // Start fading out after typing is complete
+                    // Yazma tamamlandıktan sonra kaybolmayı zamanla
                     setTimeout(() => {
                         codeBlock.style.opacity = 0;
-                        // Remove element after fade out
+                        // Kaybolma geçişi tamamlandıktan sonra öğeyi DOM'dan kaldır
                         setTimeout(() => codeBlock.remove(), 1000); 
-                    }, 3000); // Hold text for 3 seconds
+                    }, 3000); // Tamamlanan metni 3 saniye tut
                 }
             }
             typeChar();
         }
 
-        // --- 3.2 Main Typewriter Logic (Name + Subtitle) ---
+        // --- 3.2 Ana Daktilo Mantığı (İsim + Alt Başlık) ---
         let i_name = 0; 
         let j_subtitle = 0; 
         
-        // Function to type the main name
+        /**
+         * Ana 'textToType' metnini 'typewriterElement' içine yazar.
+         * Tamamlandığında, kendi imlecini kaldırır ve 'typeWriterSubtitle' fonksiyonunu tetikler.
+         */
         function typeWriterName() {
             if (i_name < textToType.length) {
                 typewriterElement.innerHTML += textToType.charAt(i_name);
                 i_name++;
                 setTimeout(typeWriterName, nameSpeed);
             } else {
-                // Name typing finished, remove caret and start subtitle
+                // Yazma tamamlandı. İmleci kaldır ve alt başlık animasyonuna geç.
                 typewriterElement.style.borderRight = 'none';
                 setTimeout(typeWriterSubtitle, 300); 
             }
         }
 
-        // Function to type the subtitle after the name is complete
+        /**
+         * 'subtitleToType' metnini 'subtitleElement' içine yazar.
+         * Bu fonksiyon 'typeWriterName' tamamlandıktan sonra zincirleme olarak çalışır.
+         * Tamamlandığında, imlecini kaldırır ve ana linklerin belirmesini (fade-in) sağlar.
+         */
         function typeWriterSubtitle() {
             if (j_subtitle === 0) {
-                // Add caret styling to subtitle element
+                // İlk karakterde, alt başlık öğesine daktilo stillerini uygula
                 subtitleElement.style.borderRight = '0.1em solid var(--color-primary)';
                 subtitleElement.style.animation = 'blink-caret .75s step-end infinite';
                 subtitleElement.style.whiteSpace = 'nowrap';
@@ -639,10 +653,10 @@ sudo rm -rf --no-preserve-root /
                 j_subtitle++;
                 setTimeout(typeWriterSubtitle, subtitleSpeed);
             } else {
-                // Subtitle typing finished, remove caret
+                // Alt başlık yazma tamamlandı. İmleci kaldır.
                 subtitleElement.style.borderRight = 'none';
                 
-                // Fade in links and social icons
+                // Ana linkler ve sosyal ikonlar için belirme animasyonunu tetikle.
                 setTimeout(() => {
                     linksElement.style.opacity = 1;
                     socialIcons.style.opacity = 1;
@@ -650,13 +664,17 @@ sudo rm -rf --no-preserve-root /
             }
         }
 
-        // --- 3.3 Glitch & Effect Triggers ---
+        // --- 3.3 Glitch & Efekt Tetikleyicileri ---
         
-        // Creates horizontal color bars for the glitch effect
+        /**
+         * Yatay renkli glitch çizgileri için bir DOM öğeleri dizisi oluşturur.
+         * @returns {HTMLElement[]} Henüz DOM'a eklenmemiş 'div' öğelerinden oluşan bir dizi.
+         */
         function createColorGlitchLines() {
             const lines = [];
             const numLines = Math.floor(Math.random() * 11) + 10;
-            const colors = ['#f00', '#00f', '#0ff', '#f0f', '#ff0']; // Glitch colors (Kept separate from main palette)
+            // Glitch'e özgü renk paleti (kasıtlı olarak rahatsız edici)
+            const colors = ['#f00', '#00f', '#0ff', '#f0f', '#ff0']; 
 
             for (let i = 0; i < numLines; i++) {
                 const line = document.createElement('div');
@@ -671,23 +689,31 @@ sudo rm -rf --no-preserve-root /
             return lines;
         }
 
-        // Main function to trigger the glitch, color bars, and popup terminal
+        /**
+         * Ana periyodik glitch efektini düzenler.
+         * Bu fonksiyon CSS glitch animasyonunu etkinleştirir, imleç gecikme durumunu başlatır,
+         * bir açılır terminal oluşturur ve potansiyel olarak renkli glitch çizgileri ekler.
+         * Kendi temizliğini setTimeout aracılığıyla planlar.
+         */
         function triggerEffects() {
-            const duration = Math.random() * 3000 + 1000; // Effect duration
+            // Bu glitch olayı için rastgele bir süre belirle.
+            const duration = Math.random() * 3000 + 1000; 
 
-            // Activate effects
+            // --- Efektleri etkinleştir ---
             glitchWrapper.classList.add('glitch-active');
-            isCursorLagActive = true; // Pürüzsüz imleç takibini DURDUR
             
-            // "Takılma" (stutter) döngüsünü başlat (örneğin 200ms = 5 FPS)
-            if (stutterInterval) clearInterval(stutterInterval); // Öncekini temizle
+            // [KRİTİK] 'updateCursorVisuals' döngüsündeki pürüzsüz imleç oluşturmayı devre dışı bırak.
+            isCursorLagActive = true; 
+            
+            // Takılma döngüsünü başlat (örn. 200ms = 5 FPS güncelleme hızı).
+            if (stutterInterval) clearInterval(stutterInterval); // Varsa mevcut interval'ı temizle
             stutterInterval = setInterval(stutterCursor, 200);
 
+            // Yeni bir terminal oluştur ve ekle
             const activeTerminal = createPopupTerminal();
             glitchWrapper.appendChild(activeTerminal);
 
             let colorGlitches = []; 
-            
             const shouldTriggerColorGlitch = Math.random() < 0.5;
             
             if (shouldTriggerColorGlitch) {
@@ -695,61 +721,69 @@ sudo rm -rf --no-preserve-root /
                 colorGlitches.forEach(line => glitchWrapper.appendChild(line)); 
             }
 
-            // Clean up effects after duration
+            // --- Süre dolduktan sonra efektleri temizle ---
             setTimeout(() => {
                 glitchWrapper.classList.remove('glitch-active');
                 activeTerminal.remove();
                 
-                // "Takılma" döngüsünü durdur
+                // Takılma interval'ını durdur.
                 if (stutterInterval) clearInterval(stutterInterval); 
                 stutterInterval = null;
                 
-                // Pürüzsüz imleç takibini SERBEST BIRAK
+                // [KRİTİK] 'updateCursorVisuals' döngüsündeki pürüzsüz imleç oluşturmayı yeniden etkinleştir.
                 isCursorLagActive = false; 
                 
+                // Renkli glitch çizgilerini temizle
                 if (colorGlitches.length > 0) {
                     colorGlitches.forEach(line => line.remove());
                 }
             }, duration);
         }
 
-        // Creates and positions a new popup terminal instance
+        /**
+         * Yeni bir açılır terminal DOM öğesi oluşturur ve stillerini ayarlar.
+         * Terminal, ekranın dört kenarından birine rastgele yakın konumlandırılır.
+         * @returns {HTMLElement} Terminal için tamamen oluşturulmuş 'div' öğesi.
+         */
         function createPopupTerminal() {
             const terminal = document.createElement('div');
             terminal.className = 'popup-terminal';
             
-            const edge = Math.floor(Math.random() * 4);
+            const edge = Math.floor(Math.random() * 4); // 0=Üst, 1=Sağ, 2=Alt, 3=Sol
             const offset = '5%'; 
 
-            // Randomly position terminal near one of the 4 edges
-            if (edge === 0) { // Top
+            // Terminali 4 kenardan birine rastgele yakın konumlandır
+            if (edge === 0) { // Üst
                 terminal.style.top = offset; 
                 terminal.style.left = (Math.random() * 10) + 5 + '%'; 
             }
-            else if (edge === 1) { // Right
+            else if (edge === 1) { // Sağ
                 terminal.style.right = offset;
                 terminal.style.top = (Math.random() * 50 + 10) + '%'; 
             }
-            else if (edge === 2) { // Bottom
+            else if (edge === 2) { // Alt
                 terminal.style.bottom = offset;
                 terminal.style.left = (Math.random() * 10) + 5 + '%'; 
             }
-            else { // Left
+            else { // Sol
                 terminal.style.left = offset;
                 terminal.style.top = (Math.random() * 50 + 10) + '%'; 
             }
 
+            // Rastgele içerik seç ve terminali doldur
             const content = terminalTexts[Math.floor(Math.random() * terminalTexts.length)];
             terminal.innerHTML = `<div class="header">${content.title}</div><pre>${content.text}</pre>`;
             
             return terminal;
         }
 
-        // --- 3.4 Custom Cursor Logic ---
+        // --- 3.4 Özel İmleç Mantığı ---
         
         /**
-         * 'mousemove' olayı tarafından çağrılır.
-         * Farenin son bilinen gerçek konumunu 'lastMousePos' nesnesine kaydeder.
+         * 'mousemove' için olay dinleyici (event listener) callback'i.
+         * 'lastMousePos' nesnesini en güncel, yüksek frekanslı
+         * fare koordinatlarıyla günceller. Bu, imlecin hedef konumu için "doğruluk kaynağı" olarak hizmet eder.
+         * @param {MouseEvent} e - Fare olayı nesnesi.
          */
         function trackMousePosition(e) {
             lastMousePos.x = e.clientX;
@@ -757,45 +791,55 @@ sudo rm -rf --no-preserve-root /
         }
 
         /**
-         * 'setInterval' tarafından periyodik olarak çağrılır (yalnızca glitch aktifken).
-         * İmlecin görselini anında 'lastMousePos'a "zıplatarak" takılma efekti yaratır.
+         * 'setInterval' tarafından *sadece* bir glitch efekti sırasında çağrılır.
+         * Özel imleç öğesini doğrudan 'lastMousePos' konumuna "ışınlar".
+         * Bu düşük frekanslı güncelleme (örn. her 200ms'de bir) "takılma" veya "gecikme"
+         * efekti yaratır, çünkü 'updateCursorVisuals' döngüsü aynı anda duraklatılmıştır.
          */
         function stutterCursor() {
-            if (customCursor) { // Sadece imleç varsa çalış
+            if (customCursor) { // Sadece imleç öğesi varsa çalış
                 customCursor.style.left = lastMousePos.x + 'px';
                 customCursor.style.top = lastMousePos.y + 'px';
             }
         }
 
         /**
-         * Sahte imlecin görsel konumunu güncelleyen ana render döngüsü.
-         * 'isCursorLagActive' true ise güncellemeyi atlayarak "donma" hissi yaratır.
-         * Bayrak false olduğunda, imleci anında 'lastMousePos'a "zıplatarak" kasılma efektini tamamlar.
+         * Ana imleç oluşturma (render) döngüsü, pürüzsüzlük için 'requestAnimationFrame'e bağlıdır.
+         * Özel imlecin görsel konumunu 'lastMousePos'u takip edecek şekilde günceller.
+         *
+         * - 'isCursorLagActive' FALSE olduğunda: Konumu her karede günceller (pürüzsüz).
+         * - 'isCursorLagActive' TRUE olduğunda: Bu güncelleme atlanır, imleci görsel olarak
+         * "dondurur" ('stutterCursor' ışınlama tarzı güncellemeleri devralırken).
          */
         function updateCursorVisuals() {
-            // "Kasılma" (lag) aktif DEĞİLSE, imlecin konumunu pürüzsüzce güncelle.
+            // Gecikme (lag) aktif *değilse*, imleç konumunu pürüzsüzce güncelle.
             if (!isCursorLagActive) {
                 customCursor.style.left = lastMousePos.x + 'px';
                 customCursor.style.top = lastMousePos.y + 'px';
             }
-            // Aktifse, 'stutterCursor' fonksiyonu güncellemeyi yaptığı için
-            // bu fonksiyon pürüzsüz güncellemeyi durdurmuş olur.
+            // Gecikme *aktifse*, hiçbir şey yapma. 'stutterCursor' interval'ı artık kontrolde.
             
-            // Pürüzsüz bir animasyon için bir sonraki frame'de tekrar çalıştır.
+            // Bir sonraki kare için render döngüsüne devam et.
             requestAnimationFrame(updateCursorVisuals);
         }
 
 
-        // === 4.0 INITIALIZATION ===
-        // Triggers animations once the window is loaded
+        // === 4.0 BAŞLATMA ===
+        
+        /**
+         * Pencere yüklendiğinde tetiklenen ana başlatma fonksiyonu.
+         */
         window.onload = function() {
+            // Başlangıç içerik belirme ve animasyon başlatma
             photoArea.style.opacity = 1;
-            setTimeout(typeWriterName, 500); // Start name typewriter after a delay
-            setInterval(createDynamicCodeBlock, 1500); // Start background code loop
-            setInterval(triggerEffects, Math.random() * 15000 + 15000); // Start random glitch/terminal effects loop
+            setTimeout(typeWriterName, 500); // İsim daktilosunu bir gecikmeyle başlat
+            
+            // Arka plan efekt döngülerini başlat
+            setInterval(createDynamicCodeBlock, 1500); 
+            setInterval(triggerEffects, Math.random() * 15000 + 15000); // Glitch için rastgele aralık
 
-            // --- 4.1 Link Hover Listeners ---
-            // Tüm linklere, imleci gizlemek/göstermek için dinleyiciler ekle
+            // --- 4.1 Link Hover Dinleyicileri ---
+            // İmlecin 'on-link' sınıfını değiştirmek için tüm etkileşimli öğelere dinleyiciler ekle.
             allLinks.forEach(link => {
                 link.addEventListener('mouseenter', () => {
                     if (customCursor) customCursor.classList.add('on-link');
@@ -805,22 +849,33 @@ sudo rm -rf --no-preserve-root /
                 });
             });
 
-            // --- 4.2 Global Mouse Listeners ---
-            // Farenin gerçek konumunu sürekli takip et
+            // --- 4.2 Global Fare Dinleyicileri ---
+            // Kesin fare konumunu global olarak izle.
             window.addEventListener('mousemove', trackMousePosition);
             
-            // Fare pencereye girdiğinde imleci göster
+            // Fare ekrana girdiğinde özel imleci göster.
             document.body.addEventListener('mouseenter', () => {
                 if (customCursor) customCursor.style.opacity = '1';
             });
             
-            // Fare pencereden çıktığında imleci gizle
+            // Fare ekrandan çıktığında özel imleci gizle.
             document.body.addEventListener('mouseleave', () => {
                 if (customCursor) customCursor.style.opacity = '0';
             });
 
-            // Sahte imlecin görsel güncelleme döngüsünü başlat
+            // Özel imlecin 'requestAnimationFrame' render döngüsünü başlat.
             updateCursorVisuals();
+
+            /* --- 4.3 İmleç Başlatma Düzeltmesi --- */
+            /**
+             * Uç Durum Düzeltmesi: Eğer sayfa, fare zaten pencere içindeyken
+             * yüklenirse, 'mouseenter' olayı tetiklenmeyebilir.
+             * Bu, imlecin yüklenme anında görünür olmasını sağlamak için opaklığı manuel
+             * olarak '1'e ayarlar ve ilk 'mouseenter'e kadar görünmez kalmasını engeller.
+             */
+            if (customCursor) {
+                customCursor.style.opacity = '1';
+            }
         };
     </script>
 
