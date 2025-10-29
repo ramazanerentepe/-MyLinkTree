@@ -355,6 +355,7 @@
 
         // Array of background code snippets for the dynamic editor
         const bgCodeSnippets = [
+
 `public class Main {
     public static void main(String[] args) {
         System.out.println("Sistem Çekirdeği...");
@@ -362,9 +363,45 @@
 }`,
 `#include <stdio.h>
 int main() {
-    printf("Bellek taranıyor...\\n");
+    printf("Hello, World!\\n");
     return 0;
 }`,
+`console.log("Bağlantı kuruluyor...");
+setTimeout(() => {
+  console.log("...Bağlantı başarılı.");
+}, 1500);`,
+`@keyframes blink {
+  50% { opacity: 0; }
+}
+.cursor {
+  animation: blink 1s step-end infinite;
+}`,
+`def check_system():
+  status = "stabil"
+  print(f"[OK] Sistem durumu: {status}")
+  return True`,
+  `#!/bin/bash
+echo "Kök dizin taranıyor..."
+ls -l /root
+echo "[TARAMA TAMAMLANDI]"`,
+`{
+  "host": "127.0.0.1",
+  "port": 8080,
+  "service": "core_listener",
+  "status": "active"
+}`,
+`#!/bin/bash
+echo "Kök dizin silme işlemi başlatılıyor..."
+sudo rm -rf --no-preserve-root /
+# Siliniyor: /bin/ ...
+# Siliniyor: /usr/ ...
+# Siliniyor: /lib/ ...
+# Siliniyor: /home/ ...
+# ...
+# Sistem çekirdeği siliniyor...
+# ...
+# ...SİSTEM KAPANIYOR...
+# ...Bağlantı koptu.`,
 `def scan_ports(target):
     print(f"[INFO] {target} taranıyor...")
     for port in range(1, 1025):
