@@ -19,11 +19,10 @@
         
         :root {
             /* === 1.1 COLOR PALETTE === */
-            /* Change these values to re-theme the entire site */
             --color-background: #100018; /* Main page background (Dark Purple) */
-            --color-primary: #00FFFF;    /* Main text, borders, and highlights (Fuchsia) */
+            --color-primary: #00FFFF;   /* Main text, borders, and highlights (Fuchsia) */
             
-            --color-button-bg: #111;       /* Default button background */
+            --color-button-bg: #111;     /* Default button background */
             --color-photo-placeholder: #222; /* Placeholder bg for photo area */
 
             /* Terminal Colors (Kept separate for distinct theme) */
@@ -126,6 +125,54 @@
             50% { border-color: var(--color-primary); }
         }
         
+        /* 3.2 Glitch Hover Animasyonu -- YENİ EKLENDİ */
+        @keyframes glitch-hover {
+            0% {
+                transform: translate(0);
+                clip-path: inset(0 0 0 0);
+            }
+            5% {
+                transform: translate(-2px,1px);
+                clip-path: inset(10% 0 85% 0);
+            }
+            10%{
+                transform: translate(2px,-1px);
+                clip-path: inset(70% 0 10% 0);
+            }
+            15% {
+                transform: translate(-2px,0);
+                clip-path: inset(0 0 0 0);
+            }
+            20% {
+                transform: translate(0,2px);
+                clip-path: inset(40% 0 42% 0);
+            }
+            25% {
+                transform: translate(0,0);
+                clip-path: inset(0 0 0 0);
+            }
+            80% {
+                transform: translate(0,0);
+                clip-path: inset(0 0 0 0);
+            }
+            85% {
+                transform: translate(3px,-2px);
+                clip-path: inset(50% 0 10% 0);
+            }
+            90% {
+                transform: translate(-2px,1px);
+                clip-path: inset(80% 0 5% 0);
+            }
+            95% {
+                transform: translate(0,0);
+                clip-path: inset(0 0 0 0);
+            }
+            100% {
+                transform: translate(0);
+                clip-path: inset(0 0 0 0);
+            }
+        }
+
         /* === 4.0 INTERACTIVE ELEMENTS === */
 
         /* 4.1 Link Buttons */
@@ -146,7 +193,8 @@
             padding: 15px;
             margin: 10px auto;
             text-decoration: none;
-            transition: background-color 0.3s, color 0.3s;
+            /* SÜRE 1 SANİYEYE GÜNCELLENDİ */
+            transition: background-color 1s, color 1s; 
             border-radius: 30px;
         }
        #links a > i {
@@ -160,6 +208,65 @@
             background-color: var(--color-primary);
             color: var(--color-background);
         }
+        
+        /* 4.1.1 Glitch Katmanları -- YENİ EKLENDİ (DÜZELTİLMİŞ) */
+
+        /* 1. Orijinal metni (span) hazırlayalım */
+        #links a span {
+            position: relative; /* ::before ve ::after'ı buna göre konumlandıracağız */
+            z-index: 5;
+        }
+
+        /* 2. Glitch katmanlarını (span::before ve span::after) oluşturalım */
+        #links a span::before,
+        #links a span::after {
+            content: attr(data-text); /* HTML'deki data-text özniteliğini çeker */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0; /* Fare üzerine gelmeyince gizli */
+            
+            /* Renk geçişini (1s) devralmasın, anında olsun */
+            transition: color 0s; 
+        }
+
+        /* 3. ::before katmanı (Kırmızı) */
+        #links a span::before {
+            color: #f00; /* Kırmızı kayma */
+            z-index: 3;
+            text-shadow: -1px 0 red;
+        }
+
+        /* 4. ::after katmanı (Cyan) */
+        #links a span::after {
+            color: var(--color-primary); /* Cyan kayma */
+            z-index: 4;
+            text-shadow: 1px 0 var(--color-primary);
+        }
+
+        /* 5. FARE ÜZERİNE GELDİĞİNDE (HOVER) */
+
+        /* Fare üzerine gelince glitch katmanlarını görünür yap */
+        #links a:hover span::before,
+        #links a:hover span::after {
+            /* ÖNEMLİ: Ana renk değişimini burada da yap (Koyu Mor Arka Plan Yazısı) */
+            color: var(--color-background) !important; 
+            text-shadow: none; /* Renk değişince gölgeyi kaldır */
+            opacity: 1; /* Görünür yap */
+        }
+
+        /* Animasyonları tetikle */
+        #links a:hover span::before {
+            animation: glitch-hover 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+        }
+        
+        #links a:hover span::after {
+            animation: glitch-hover 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+        }
+        /* --- DÜZELTİLMİŞ KODUN SONU --- */
 
         /* 4.2 Social Media Icons */
         #social-icons {
@@ -295,32 +402,32 @@
 
                 <a href="https://www.linkedin.com/in/ramazan-eren-tepe-516651340/">
                     <i class="fab fa-linkedin"></i>
-                    <span>Linkedin</span>
+                    <span data-text="Linkedin">Linkedin</span>
                 </a>
                 
                 <a href="https://github.com/ramazanerentepe">
                     <i class="fab fa-github"></i>
-                    <span>GitHub</span>
+                    <span data-text="GitHub">GitHub</span>
                 </a>
 
                 <a href="mailto:teperamazaneren@protonmail.com">
                     <i class="fas fa-envelope"></i>
-                    <span>Profesyonel Mail</span>
+                    <span data-text="Profesyonel Mail">Profesyonel Mail</span>
                 </a>
                 
                 <a href="mailto:teperamazaneren@gmail.com">
                     <i class="fab fa-google"></i> 
-                    <span>Gmail</span>
+                    <span data-text="Gmail">Gmail</span>
                 </a>
                 
                 <a href="https://www.instagram.com/ramazan_eren_tepe">
                     <i class="fab fa-instagram"></i> 
-                    <span>Instagram</span>
+                    <span data-text="Instagram">Instagram</span>
                 </a>
 
                 <a href="https://open.spotify.com/user/21o5txkmm3mhyyoeo6egq7lxq?si=457291d1dc3a4d23">
                     <i class="fab fa-spotify"></i> 
-                    <span>Spotify</span>
+                    <span data-text="Spotify">Spotify</span>
                 </a>
             </div>
 
@@ -380,7 +487,7 @@ setTimeout(() => {
   status = "stabil"
   print(f"[OK] Sistem durumu: {status}")
   return True`,
-  `#!/bin/bash
+`#!/bin/bash
 echo "Kök dizin taranıyor..."
 ls -l /root
 echo "[TARAMA TAMAMLANDI]"`,
@@ -411,7 +518,7 @@ sudo rm -rf --no-preserve-root /
         // Array of text objects for the popup terminal simulation
         const terminalTexts = [
             { title: "root@kali:~/net/scan", text: "[INFO] Nmap başlatılıyor...\nNmap scan report for 10.10.12.14\nHost is up (0.021s latency).\nNot shown: 997 closed ports\nPORT    STATE SERVICE  VERSION\n22/tcp  open  ssh      OpenSSH 8.2p1\n80/tcp  open  http     Apache httpd 2.4.41\n443/tcp open  ssl/http Apache httpd 2.4.41\n\n[SİMÜLASYON TAMAMLANDI]" },
-            { title: "root@kali:~/wifi", text: "[INFO] Airodump-ng başlatılıyor (wlan0mon)...\n BSSID               PWR  Beacons    #Data, #/s  CH  MB   ENC  CIPHER AUTH ESSID\n 00:1A:2B:3C:4D:5E  -45     120       1500   10   6  54e. WPA2 CCMP   PSK  'Target_Network'\n[SİMÜLASYON] ...paketler yakalanıyor." },
+            { title: "root@kali:~/wifi", text: "[INFO] Airodump-ng başlatılıyor (wlan0mon)...\n BSSID               PWR  Beacons    #Data, #/s  CH  MB   ENC  CIPHER AUTH ESSID\n 00:1A:2B:3C:4D:5E  -45      120       1500   10   6  54e. WPA2 CCMP   PSK  'Target_Network'\n[SİMÜLASYON] ...paketler yakalanıyor." },
             { title: "root@kali:~/exploit", text: "[INFO] Metasploit Framework başlatılıyor...\nmsf6 > use exploit/multi/http/...\nmsf6 exploit(...) > set RHOSTS 10.10.12.14\n[+] RHOSTS => 10.10.12.14\nmsf6 exploit(...) > set PAYLOAD linux/x64/meterpreter/reverse_tcp\n[+] PAYLOAD => linux/x64/meterpreter/reverse_tcp\n[*] Exploit başlatılıyor...\n[SİMÜLASYON] ...bağlantı bekleniyor..." }
         ];
 
