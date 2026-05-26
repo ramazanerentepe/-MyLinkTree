@@ -1,0 +1,398 @@
+/* === 1.0 GLOBAL STİLLER === */
+:root {
+    /* === 1.1 RENK PALETİ === */
+    --color-background: #100018;      /* Ana sayfa arka planı (Koyu Mor) */
+    --color-primary: #00FFFF;         /* Ana vurgu rengi (Camgöbeği) */
+    --color-button-bg: #111;          /* Varsayılan düğme arka planı */
+    --color-photo-placeholder: #222;  /* Fotoğraf alanı için yer tutucu */
+
+    /* Terminal Renkleri (Farklı bir tema için ayrı tutuldu) */
+    --color-terminal-header: #E040FB;
+    --color-terminal-text: #0F0;
+    --color-terminal-shadow: rgba(224, 64, 251, 0.4);
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--color-background);
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--color-primary);
+    /** Özel imleç öğesiyle değiştirmek için varsayılan sistem imlecini gizle */
+    cursor: none;
+}
+
+/* === 2.0 ÇEKİRDEK YAPI & KAPSAYICILAR === */
+
+/* 2.1 Glitch & Arka Plan Efektleri */
+#glitch-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#code-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.dynamic-code-block {
+    position: absolute;
+    color: var(--color-primary);
+    font-size: 0.9em;
+    white-space: pre;
+    opacity: 0;
+    transition: opacity 1s linear;
+    z-index: 2;
+    max-width: 300px;
+}
+
+/* 2.2 Ana İçerik Alanı */
+#main-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5); /* Okunabilirlik için yarı şeffaf katman */
+}
+
+/* 2.3 Profil Fotoğrafı Alanı */
+#photo-area {
+    width: 100px;
+    height: 100px;
+    background-color: var(--color-photo-placeholder);
+    border: 3px solid var(--color-primary);
+    border-radius: 50%;
+    margin-bottom: 20px;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* 2.4 Daktilo & Alt Başlık */
+#typewriter {
+    font-size: 2.5em;
+    border-right: 0.1em solid var(--color-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    letter-spacing: .1em;
+    animation: blink-caret .75s step-end infinite;
+    margin: 0;
+}
+
+#subtitle {
+    font-size: 1.2em;
+    color: var(--color-primary);
+    opacity: 0.8;
+    margin: 10px 0 0 0;
+    height: 1.5em; /* Alt başlık yazılırken kaymayı önlemek için yer ayır */
+}
+
+/* 2.5 Özel İmleç */
+#custom-cursor {
+    position: fixed;
+    /** İmleç öğesinin fare olaylarını (tıklamalar, üzerine gelmeler) engellememesini sağlar */
+    pointer-events: none;
+    /** İçeriğin üzerinde, ancak açılır terminallerin (z-index: 30) altında olması için yüksek z-index */
+    z-index: 25;
+    /** Başlangıçta gizli; JS tarafından fare girişinde görünür yapılacak */
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
+    /** 'left' ve 'top' stilleri JS render döngüsü tarafından dinamik olarak ayarlanır */
+}
+
+#custom-cursor i {
+    color: white;
+    font-size: 1.1em;
+    text-shadow: none;
+    /** İmlecin "sıcak noktasını" (hotspot) gerçek fare konumuyla hizalamak için ofset */
+    transform: translate(-3px, -3px);
+    /** Etkileşimli öğelerin üzerine gelindiğinde ikonun yumuşakça kaybolmasını sağlar */
+    transition: opacity 0.2s ease-out;
+}
+
+/* 2.5.1 Özel İmleç Link Üzerindeyken (Hover) Durumu */
+/** Bu sınıf, okun (ikonun) gizlenmesi için JS tarafından eklenir */
+#custom-cursor.on-link i {
+    opacity: 0;
+}
+
+/* === 3.0 ANİMASYON KEYFRAME'LERİ === */
+
+/* 3.1 Yazı İmleci Yanıp Sönme Animasyonu */
+@keyframes blink-caret {
+    from, to { border-color: transparent }
+    50% { border-color: var(--color-primary); }
+}
+
+/* 3.2 Buton Glitch Hover Animasyonu */
+@keyframes glitch-hover {
+    0% {
+        transform: translate(0);
+        clip-path: inset(0 0 0 0);
+    }
+    5% {
+        transform: translate(-2px,1px);
+        clip-path: inset(10% 0 85% 0);
+    }
+    10%{
+        transform: translate(2px,-1px);
+        clip-path: inset(70% 0 10% 0);
+    }
+    15% {
+        transform: translate(-2px,0);
+        clip-path: inset(0 0 0 0);
+    }
+    20% {
+        transform: translate(0,2px);
+        clip-path: inset(40% 0 42% 0);
+    }
+    25% {
+        transform: translate(0,0);
+        clip-path: inset(0 0 0 0);
+    }
+    80% {
+        transform: translate(0,0);
+        clip-path: inset(0 0 0 0);
+    }
+    85% {
+        transform: translate(3px,-2px);
+        clip-path: inset(50% 0 10% 0);
+    }
+    90% {
+        transform: translate(-2px,1px);
+        clip-path: inset(80% 0 5% 0);
+    }
+    95% {
+        transform: translate(0,0);
+        clip-path: inset(0 0 0 0);
+    }
+    100% {
+        transform: translate(0);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+/* === 4.0 ETKİLEŞİMLİ ÖĞELER === */
+
+/* 4.1 Link Butonları */
+#links {
+    margin-top: 30px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    width: 90%;
+    max-width: 300px;
+}
+
+#links a {
+    display: block;
+    position: relative;
+    text-align: center;
+    background-color: var(--color-button-bg);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    padding: 15px;
+    margin: 10px auto;
+    text-decoration: none;
+    transition: background-color 1s, color 1s;
+    border-radius: 30px;
+}
+
+#links a > i {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+}
+
+#links a:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+/* 4.1.1 Buton Glitch Katmanları */
+#links a span {
+    position: relative;
+    z-index: 5;
+}
+
+#links a span::before,
+#links a span::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    opacity: 0;
+    transition: color 0s;
+}
+
+#links a span::before {
+    color: #f00;
+    z-index: 3;
+    text-shadow: -1px 0 red;
+}
+
+#links a span::after {
+    color: var(--color-primary);
+    z-index: 4;
+    text-shadow: 1px 0 var(--color-primary);
+}
+
+#links a:hover span::before,
+#links a:hover span::after {
+    color: var(--color-background) !important;
+    text-shadow: none;
+    opacity: 1;
+}
+
+#links a:hover span::before {
+    animation: glitch-hover 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+}
+
+#links a:hover span::after {
+    animation: glitch-hover 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+}
+
+/* 4.2 Sosyal Medya İkonları */
+#social-icons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.social-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+    border-radius: 50%;
+    text-decoration: none;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.social-icon:hover {
+    background-color: var(--color-primary);
+    color: var(--color-background);
+}
+
+/* === 5.0 DİNAMİK ÖĞELER (JS KONTROLLÜ) === */
+
+/* 5.1 Açılır Terminal */
+.popup-terminal {
+    position: absolute;
+    z-index: 30;
+    background: rgba(30, 25, 30, 0.95);
+    border-top: 2px solid var(--color-terminal-header);
+    color: var(--color-terminal-text);
+    padding: 15px;
+    font-size: 0.9em;
+    width: 90%;
+    max-width: 500px;
+    height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 0 30px var(--color-terminal-shadow);
+    opacity: 0;
+    animation: terminal-fade-in 0.3s forwards;
+}
+
+.popup-terminal pre { margin: 0; white-space: pre-wrap; color: var(--color-terminal-text); }
+.popup-terminal .header {
+    font-weight: bold;
+    color: var(--color-terminal-header);
+    border-bottom: 1px solid #555;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+
+@keyframes terminal-fade-in {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* 5.2 Glitch Efekt Stilleri */
+#glitch-wrapper.glitch-active {
+    animation: glitch-lines 0.3s steps(5) infinite;
+}
+
+@keyframes glitch-lines {
+    0% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+    10% { clip-path: inset(10% 0 88% 0); transform: translate(-30px, 2px); }
+    20% { clip-path: inset(40% 0 55% 0); transform: translate(30px, -3px); }
+    30% { clip-path: inset(25% 0 70% 0); transform: translate(0, 0); }
+    40% { clip-path: inset(80% 0 10% 0); transform: translate(-40px, 1px); }
+    60% { clip-path: inset(25% 0 70% 0); transform: translate(25px, 4px); }
+    70% { clip-path: inset(50% 0 45% 0); transform: translate(0, 0); }
+    80% { clip-path: inset(50% 0 45% 0); transform: translate(-20px, -2px); }
+    100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+}
+
+.color-glitch-line {
+    position: absolute;
+    z-index: 50;
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+/* === 6.0 RESPONSIVE (MOBİL) TASARIM === */
+@media (max-width: 600px) {
+    /** Mobil cihazlarda varsayılan sistem imlecini geri yükle */
+    body, html {
+        cursor: auto;
+    }
+    /** Özel imleç öğesini mobilde tamamen devre dışı bırak */
+    #custom-cursor {
+        display: none;
+    }
+    #typewriter {
+        font-size: 1.8em;
+    }
+    #subtitle {
+        font-size: 1.0em;
+        height: auto; /* Yüksekliğin ayarlanmasına izin ver */
+    }
+    .popup-terminal {
+        font-size: 0.75em;
+        height: 250px;
+    }
+    #social-icons {
+        margin-top: 15px;
+    }
+
+    /* Küçük ekranlar için ayarlanmış glitch efekti */
+    @keyframes glitch-lines {
+        0% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+        10% { clip-path: inset(10% 0 88% 0); transform: translate(-15px, 1px); }
+        20% { clip-path: inset(40% 0 55% 0); transform: translate(15px, -1px); }
+        30% { clip-path: inset(25% 0 70% 0); transform: translate(0, 0); }
+        40% { clip-path: inset(80% 0 10% 0); transform: translate(-20px, 1px); }
+        60% { clip-path: inset(25% 0 70% 0); transform: translate(10px, 2px); }
+        70% { clip-path: inset(50% 0 45% 0); transform: translate(0, 0); }
+        80% { clip-path: inset(50% 0 45% 0); transform: translate(-10px, -1px); }
+        100% { transform: translate(0, 0); clip-path: inset(0 0 0 0); }
+    }
+}
