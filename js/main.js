@@ -70,7 +70,7 @@ const terminalTexts = [
 
 // --- Daktilo Yapılandırması ---
 const textToType = "є r є n";
-const subtitleToType = "ktün~Yazılım Mühendisliği 2/4";
+const subtitleToType = "ktün~Yazılım Mühendisliği 3/4";
 const nameSpeed = 150;
 const subtitleSpeed = 100;
 const codeTypingSpeed = 30;
